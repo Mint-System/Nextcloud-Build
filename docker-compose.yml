@@ -15,7 +15,7 @@ services:
     ports:
       - "127.0.0.1:80:80"
     volumes:
-      - nextcloud-nextcloud-data:/var/www/html"
+      - nextcloud-nextcloud-data:/var/www/html
   nextcloud-pgadmin:
     container_name: nextcloud-pgadmin
     image: dpage/pgadmin4:6
@@ -28,6 +28,7 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
     volumes:
       - nextcloud-pgadmin-data:/var/lib/pgadmin
+      - ./servers.json:/pgadmin4/servers.json
   nextcloud-db:
     container_name: nextcloud-db
     image: postgres:14
