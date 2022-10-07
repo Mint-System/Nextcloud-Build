@@ -1,0 +1,49 @@
+#!/bin/bash
+cd "$(dirname "$0")"
+
+function help() {
+echo
+echo "$1 <command> [options]"
+echo
+echo "commands:"
+echo
+column -t -s"|" ./task.md | tail -n +3
+echo
+}
+
+# Set env vars
+export POSTGRES_USER=nextcloud
+export POSTGRES_PASSWORD=nextcloud
+export NEXTCLOUD_IMAGE=nextcloud:22.2-apache
+
+if [[ -a ".env" ]]; then
+    export $(cat .env | sed 's/#.*//g' | xargs)
+fi
+
+function start() {
+    if test -z "$1"; then
+        echo "Open http://localhost:80 url in your browser."
+        docker-compose up -d
+    fi
+
+    if [[ "$1" =~ "db" ]]; then
+        docker-compose up -d db pgadmin
+        echo "Open http://localhost:8000 url in your browser."
+    fi
+
+    if [[ "$1" =~ "nextcloud" ]]; then
+        docker-compose up -d odoo
+        echo "Open http://localhost:80 url in your browser."
+    fi
+}
+
+case "$1" in
+    
+    start)
+        start $2
+        ;;
+    *)
+        help task
+        exit 1
+        ;;
+esac

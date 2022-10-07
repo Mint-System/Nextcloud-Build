@@ -1,0 +1,7 @@
+default.vim
+.DS_Store
+*.swp
+node_modules
+.temp
+.cache
+dist

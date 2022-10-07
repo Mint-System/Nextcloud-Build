@@ -1,0 +1,25 @@
+{
+  "name": "nextcloud-development",
+  "version": "1.0.0",
+  "description": "Nextcloud development environment.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vuepress dev .",
+    "build": "vuepress build ."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@vuepress/plugin-search": "^2.0.0-beta.51",
+    "vuepress": "^2.0.0-beta.51"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mint-System/Nextcloud-Development.git"
+  },
+  "author": "Mint System",
+  "license": "GPL3",
+  "bugs": {
+    "url": "https://github.com/Mint-System/Nextcloud-Development/issues"
+  },
+  "homepage": "https://github.com/Mint-System/Nextcloud-Development#readme"
+}
