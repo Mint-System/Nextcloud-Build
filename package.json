@@ -1,7 +1,7 @@
 {
-  "name": "nextcloud-development",
+  "name": "nextcloud-build",
   "version": "1.0.0",
-  "description": "Nextcloud development environment.",
+  "description": "The Mint System Nextcloud development environment.",
   "main": "index.js",
   "scripts": {
     "dev": "vuepress dev .",
@@ -16,8 +16,8 @@
     "type": "git",
     "url": "git+https://github.com/Mint-System/Nextcloud-Development.git"
   },
-  "author": "Mint System",
-  "license": "GPL3",
+  "author": "Mint System GmbH",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/Mint-System/Nextcloud-Development/issues"
   },

@@ -1,21 +1,29 @@
-const { defaultTheme } = require('vuepress')
-const { searchPlugin } = require('@vuepress/plugin-search')
+import { defaultTheme } from 'vuepress'
+import { searchPlugin } from '@vuepress/plugin-search'
+import { defineUserConfig } from 'vuepress'
 
-module.exports = {
+
+export default defineUserConfig({
     lang: 'en-US',
-    title: 'Nexctloud Development',
-    description: 'Nextcloud development environment.',
+    title: 'Nextcloud Build',
+    description: 'The Mint System Nextcloud development environment.',
+    head: [
+        ['link', { rel: 'icon', href: '/icon.png' }]
+    ],
     theme: defaultTheme({
         logo: '/icon.png',
-        repo: 'mint-system/nextcloud-development',
-        docsBranch: 'master',
+        repo: 'mint-system/nextcloud-build',
+        docsBranch: 'main',
         editLink: true,
         navbar: [
             { text: 'Home', link: '/' },
+            { text: 'Help', link: '/task' },
             { text: 'Mint System', link: 'https://www.mint-system.ch' }
         ],
     }),
     plugins: [
-        searchPlugin(),
+        searchPlugin({
+            maxSuggestions: 10
+        }),
     ],
-}
+})
