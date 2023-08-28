@@ -1,7 +1,7 @@
 ![](./logo.png)
 
-Nextcloud Development
-=====================
+Nextcloud Build
+===============
 
 This is the [Mint System](https://www.mint-system.ch/) Nextcloud development environment.
 
@@ -21,8 +21,8 @@ The usage section is a set of workflows. Pick the one required by your scenario.
 Clone this repository.
 
 ```bash
-git clone git@github.com:Mint-System/Nextcloud-Development.git
-cd Nextcloud-Development
+git clone git@github.com:Mint-System/Nextcloud-Build.git
+cd Nextcloud-Build
 ```
 
 ### Docker
