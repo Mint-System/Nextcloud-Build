@@ -1,8 +1,7 @@
-default.vim
-.DS_Store
-*.swp
+.obsidian/appearance.json
+.obsidian/graph.json
+.obsidian/workspace.json
+.vuepress/.temp
+.vuepress/.cache
 node_modules
-.temp
-.cache
-dist
 tmp

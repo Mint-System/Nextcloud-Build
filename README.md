@@ -1,7 +1,9 @@
 ![](./logo.png)
 
 Nextcloud Build
-===============
+===
+
+![Vercel](https://vercelbadge.vercel.app/api/mint-system/nextcloud-build)
 
 This is the [Mint System](https://www.mint-system.ch/) Nextcloud development environment.
 

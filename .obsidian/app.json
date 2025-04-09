@@ -1,0 +1,6 @@
+{
+  "trashOption": "none",
+  "userIgnoreFilters": [
+    "node_modules/"
+  ]
+}
