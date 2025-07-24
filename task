@@ -19,6 +19,10 @@ function help-table() {
     printf "$COLUMN" "run-pgload" "" "Import database from MariaDB."
     printf "$COLUMN" "install-mysql-scripts" "" "Installing MySQL scripts."
     printf "$COLUMN" "install-postgres-scripts" "" "Installing Postgres scripts."
+    printf "$COLUMN" "build-vuepress" "" "Create vuepress build."
+    printf "$COLUMN" "dev-vuepress" "" "Start vuepress development server."
+    printf "$COLUMN" "install-vuepress" "" "Install build dependencies."
+    printf "$COLUMN" "serve-vuepress" "" "Serve vuepress build."
 }
 
 function help() {
@@ -36,7 +40,7 @@ function help() {
 }
 
 # Set env vars
-#
+
 POSTGRES_USER=nextcloud
 POSTGRES_PASSWORD=nextcloud
 NEXTCLOUD_IMAGE=nextcloud:28-apache
@@ -141,8 +145,27 @@ function remove() {
     if [[ "$1" =~ "mariadb" ]]; then
         docker compose rm -f -s -v mariadb
     fi
-
 }
+
+# Docs commands
+
+function install-vuepress() {
+    pnpm install
+}
+
+function dev-vuepress() {
+    pnpm run dev
+}
+
+function build-vuepress() {
+    pnpm run build
+}
+
+function serve-vuepress() {
+    cd .vuepress/dist
+    pnpx serve
+}
+
 
 if declare -f "$1" > /dev/null; then
     "$1" "${@:2}"

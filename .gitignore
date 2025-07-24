@@ -3,6 +3,7 @@
 .obsidian/workspace.json
 .vuepress/.temp
 .vuepress/.cache
+.vuepress/dist
 node_modules
 tmp
 config.php

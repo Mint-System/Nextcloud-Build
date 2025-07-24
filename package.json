@@ -1,25 +1,18 @@
 {
-  "name": "nextcloud-build",
-  "version": "1.0.0",
-  "description": "The Mint System Nextcloud development environment.",
-  "main": "index.js",
   "scripts": {
     "dev": "vuepress dev .",
     "build": "vuepress build ."
   },
-  "dependencies": {},
   "devDependencies": {
-    "@vuepress/plugin-search": "2.0.0-beta.49",
-    "vuepress": "2.0.0-beta.49"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Mint-System/Nextcloud-Development.git"
-  },
-  "author": "Mint System GmbH",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/Mint-System/Nextcloud-Development/issues"
-  },
-  "homepage": "https://github.com/Mint-System/Nextcloud-Development#readme"
+    "@vuepress/bundler-vite": "2.0.0-rc.19",
+    "@vuepress/client": "2.0.0-rc.19",
+    "@vuepress/plugin-search": "2.0.0-rc.74",
+    "@vuepress/plugin-shiki": "2.0.0-rc.76",
+    "@vuepress/theme-default": "2.0.0-rc.76",
+    "@vuepress/utils": "2.0.0-rc.2",
+    "mermaid": "^11.4.1",
+    "sass-embedded": "^1.83.4",
+    "vue": "^3.5.13",
+    "vuepress": "2.0.0-rc.19"
+  }
 }
