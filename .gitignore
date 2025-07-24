@@ -5,3 +5,5 @@
 .vuepress/.cache
 node_modules
 tmp
+config.php
+.env

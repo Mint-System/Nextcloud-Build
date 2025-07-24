@@ -1,52 +1,157 @@
 #!/bin/bash
-cd "$(dirname "$0")"
+
+function help-table() {
+    CMD_WIDTH=26
+    OPT_WIDTH=10
+    DESC_WIDTH=42
+    COLUMN="| %-${CMD_WIDTH}s | %-${OPT_WIDTH}s | %-${DESC_WIDTH}s |\n"
+
+    printf "$COLUMN" "Command" "Option" "Description"
+    echo "|$(printf '%*s' $((CMD_WIDTH + 2)) '' | tr ' ' '-')|$(printf '%*s' $((OPT_WIDTH + 2)) '' | tr ' ' '-')|$(printf '%*s' $((DESC_WIDTH + 2)) '' | tr ' ' '-')|"
+    printf "$COLUMN" "install" "" "Install build tools."
+    printf "$COLUMN" "commit-with-llm" "" "Commit with llm generated commit message."
+    printf "$COLUMN" "occ" "[param]" "Run occ command."
+    printf "$COLUMN" "remove" "[name]" "Remove docker containers and volumes."
+    printf "$COLUMN" "start" "[name]" "Start docker container."
+    printf "$COLUMN" "show-config" "" "Show Nextcloud config.php."
+    printf "$COLUMN" "copy-config-from-container" "" "Copy config.php from Nextcloud."
+    printf "$COLUMN" "copy-config-to-container" "" "Copy config.php to Nextcloud."
+    printf "$COLUMN" "run-pgload" "" "Import database from MariaDB."
+    printf "$COLUMN" "install-mysql-scripts" "" "Installing MySQL scripts."
+    printf "$COLUMN" "install-postgres-scripts" "" "Installing Postgres scripts."
+}
 
 function help() {
-echo
-echo "$1 <command> [options]"
-echo
-echo "commands:"
-echo
-column -t -s"|" ./task.md | tail -n +3
-echo
+    echo
+    if [ -n "$1" ]; then
+        help-table | grep -i "$1" | column -t -s'|'
+    else
+        echo "task <command> [options]"
+        echo
+        echo "commands:"
+        echo
+        help-table
+    fi
+    echo
 }
 
 # Set env vars
-export POSTGRES_USER=nextcloud
-export POSTGRES_PASSWORD=nextcloud
-export NEXTCLOUD_IMAGE=nextcloud:22.2-apache
+#
+POSTGRES_USER=nextcloud
+POSTGRES_PASSWORD=nextcloud
+NEXTCLOUD_IMAGE=nextcloud:28-apache
 
 if [[ -a ".env" ]]; then
-    export $(cat .env | sed 's/#.*//g' | xargs)
+    export $(cat .env | sed 's/^#.*//g' | xargs)
 fi
 
+# Import commands
+
+if [ -d "$HOME/taskfile.build/bin" ]; then
+    for file in "$HOME/taskfile.build/bin/"*; do
+        if [ -f "$file" ]; then
+            source "$file"
+        fi
+    done
+fi
+
+# Commands
+
+function occ() {
+    docker exec -u www-data:www-data nextcloud php occ $@
+}
+
+function install() {
+    echo "Install pgloader."
+    yay -S pgloader
+}
+
+function show-config() {
+    docker exec -u www-data:www-data nextcloud cat /var/www/html/config/config.php
+}
+
+function copy-config-from-container() {
+    docker cp nextcloud:/var/www/html/config/config.php .
+}
+
+function copy-config-to-container() {
+    docker cp config.php nextcloud:/var/www/html/config/config.php
+    docker exec nextcloud chown www-data:www-data /var/www/html/config/config.php
+}
+
+function run-pgload() {
+    echo "Import database nextcloud as nextcloud"
+    pgloader mysql://nextcloud:nextcloud@localhost/nextcloud postgresql://nextcloud:${POSTGRES_PASSWORD}@localhost/nextcloud
+}
+
+function install-mysql-scripts() {
+    echo "Installing MySQL scripts."
+    curl -L https://ansible.build/mysql/install | bash
+}
+
+function install-postgres-scripts() {
+    echo "Installing Postgres scripts."
+    curl -L https://ansible.build/postgres/install | bash
+}
+
 function start() {
+    export POSTGRES_USER
+    export POSTGRES_PASSWORD
+    export NEXTCLOUD_IMAGE
+
     if test -z "$1"; then
         echo "Open http://localhost:80 url in your browser."
-        docker-compose up -d
+        docker compose up -d nextcloud
     fi
 
     if [[ "$1" =~ "db" ]]; then
-        docker-compose up -d db pgadmin
-        echo "Open http://localhost:8000 url in your browser."
+        docker compose up -d db
+        echo "Connect to psql://localhost:5432"
     fi
 
     if [[ "$1" =~ "nextcloud" ]]; then
-        docker-compose up -d odoo
+        docker compose up -d nextcloud
         echo "Open http://localhost:80 url in your browser."
+    fi
+
+
+    if [[ "$1" =~ "mariadb" ]]; then
+        docker compose up -d mariadb
+        echo "Connect to psql://localhost:3306"
     fi
 }
 
-case "$1" in
-    
-    start)
-        start $2
-        ;;
-    kill)
-        docker-compose down -v
-        ;;
-    *)
-        help task
-        exit 1
-        ;;
-esac
+function remove() {
+    export POSTGRES_USER
+    export POSTGRES_PASSWORD
+    export NEXTCLOUD_IMAGE
+
+    if test -z "$1"; then
+        docker compose down -v
+    fi
+
+    if [[ "$1" =~ "postgres" ]]; then
+        docker compose rm -f -s -v postgres
+    fi
+
+    if [[ "$1" =~ "nextcloud" ]]; then
+        docker compose rm -f -s -v nextcloud
+    fi
+
+    if [[ "$1" =~ "mariadb" ]]; then
+        docker compose rm -f -s -v mariadb
+    fi
+
+}
+
+if declare -f "$1" > /dev/null; then
+    "$1" "${@:2}"
+else
+    case "$1" in
+        *)
+            echo "Unknown command: $1"
+            help task
+            exit 1
+            ;;
+    esac
+fi
